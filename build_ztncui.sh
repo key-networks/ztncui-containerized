@@ -12,7 +12,6 @@ cd /home
 git clone https://github.com/key-networks/ztncui
 
 cd /home/ztncui
-git checkout develop
 
 npm install
 

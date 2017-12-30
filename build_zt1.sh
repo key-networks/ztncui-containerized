@@ -119,8 +119,7 @@ if [ ! -e /usr/sbin/zerotier-one ]; then
 	echo
 	exit 1
 else
-  echo '*** ZeroTier One seems to be installed ***'
-  chown -R zerotier-one.zerotier-one /var/lib/zerotier-one
+  echo '*** ZeroTier One is installed ***'
   exit 0
 fi
 
