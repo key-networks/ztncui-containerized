@@ -119,6 +119,9 @@ if [ ! -e /usr/sbin/zerotier-one ]; then
 	echo
 	exit 1
 else
+  touch /var/lib/zerotier-one/authtoken.secret
+  chown zerotier-one.zerotier-one /var/lib/zerotier-one/authtoken.secret
+  chmod 640 /var/lib/zerotier-one/authtoken.secret
   echo '*** ZeroTier One is installed ***'
   exit 0
 fi

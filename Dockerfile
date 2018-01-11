@@ -5,10 +5,12 @@ COPY build_zt1.sh /usr/bin/
 RUN build_zt1.sh
 EXPOSE 9993/udp
 
-COPY build_ztncui.sh /usr/bin/
-COPY openssl.cnf /tmp
-RUN build_ztncui.sh
-COPY .env /home/ztncui
+RUN yum install https://download.key-networks.com/el7/ztncui/1/ztncui-release-1-1.noarch.rpm -y
+RUN yum install ztncui -y
+RUN yum install sudo -y
+RUN rm -f /var/lib/zerotier-one/authtoken.secret
+
+COPY .env /opt/key-networks/ztncui
 EXPOSE 3443
 
 COPY exec.sh /usr/sbin/
