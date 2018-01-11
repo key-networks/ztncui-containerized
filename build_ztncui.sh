@@ -2,22 +2,11 @@
 
 set -e
 
-curl --silent --location https://rpm.nodesource.com/setup_8.x | bash -
+touch /var/lib/zerotier-one/authtoken.secret
+chown zerotier-one.zerotier-one /var/lib/zerotier-one/authtoken.secret
+chmod 640 /var/lib/zerotier-one/authtoken.secret
 
-yum install -y nodejs sudo gcc-c++ make git openssl 
-
-npm install -g node-gyp
-
-cd /home
-git clone https://github.com/key-networks/ztncui
-
-cd /home/ztncui
-
-npm install
-
-cp -v etc/default.passwd etc/passwd
-
-cd etc/tls
-openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout privkey.pem -out fullchain.pem -config /tmp/openssl.cnf
-
-chown -R zerotier-one.zerotier-one /home/ztncui
+yum install https://download.key-networks.com/el7/ztncui/1/ztncui-release-1-1.noarch.rpm -y
+yum install ztncui -y
+yum install sudo -y
+rm -f /var/lib/zerotier-one/authtoken.secret
