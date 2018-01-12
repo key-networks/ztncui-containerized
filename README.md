@@ -1,7 +1,7 @@
 # ztncui-containerized
 ## ZeroTier network controller user interface in a Docker container
 
-This is a Docker image that contains ZeroTier One and ztncui to set up a standalone ZeroTier network controller with a web user interface in a container.
+This is a Docker image that contains **[ZeroTier One](https://www.zerotier.com/download.shtml)** and **[ztncui](https://key-networks.com/ztncui)** to set up a **standalone ZeroTier network controller** with a web user interface in a container.
 
 ## Docker run
 ```shell
@@ -22,6 +22,20 @@ MYADDR=12.34.56.78
 This is to allow you to execute the following two commands in one shot to minimise the chance of some nefarious character getting in before you do:
 ```shell
 docker run --name ztncui -dp 3443:3443 --cap-add=NET_ADMIN keynetworks/ztncui && \
+docker exec ztncui iptables -I INPUT -i eth0+ ! -s $MYADDR -p tcp --dport 3443 -j DROP
+```
+
+## Persist Data in Volumes
+If you want to persist the ZeroTier and ztncui data in volumes outside of the container, then use this approach:
+
+First assign your IP address to an environment variable, for example:
+```shell
+MYADDR=12.34.56.78
+```
+Then, execute in one shot:
+```shell
+docker run -dp 3443:3443 --name ztncui --volume ztncui:/opt/key-networks/ztncui/etc/ \
+--volume zt1:/var/lib/zerotier-one/ --cap-add=NET_ADMIN keynetworks/ztncui && \
 docker exec ztncui iptables -I INPUT -i eth0+ ! -s $MYADDR -p tcp --dport 3443 -j DROP
 ```
 
