@@ -107,7 +107,8 @@ chgrp 0 /etc/yum.repos.d/zerotier.repo
 echo
 echo '*** Installing zerotier-one package...'
 
-yum install -y zerotier-one
+#yum install -y zerotier-one
+yum install -y https://download.zerotier.com/RELEASES/1.2.4/dist/redhat/el/7.5/zerotier-one-1.2.4-1.el7.centos.x86_64.rpm
 
 rm -f /tmp/zt-gpg-key
 
