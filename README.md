@@ -27,7 +27,7 @@ docker run --name ztncui -dp 3443:3443 --cap-add=NET_ADMIN keynetworks/ztncui &&
 docker exec ztncui iptables -I INPUT -i eth0+ ! -s $MYADDR -p tcp --dport 3443 -j DROP
 ```
 
-## Persist Data in Volumes
+## Persist Data in volumes
 If you want to persist the ZeroTier and ztncui data in volumes outside of the container, then use this approach:
 
 First assign your IP address to an environment variable, for example:
@@ -39,6 +39,26 @@ Then, execute in one shot:
 docker run -dp 3443:3443 --name ztncui --volume ztncui:/opt/key-networks/ztncui/etc/ \
 --volume zt1:/var/lib/zerotier-one/ --cap-add=NET_ADMIN keynetworks/ztncui && \
 docker exec ztncui iptables -I INPUT -i eth0+ ! -s $MYADDR -p tcp --dport 3443 -j DROP
+```
+
+## Copy volumes to another Docker host
+For various reasons (controller backup, redundancy, etc), it is useful to be able to copy the zt1 and ztncui volumes from one Docker host to another.
+To copy the volumes from host1 to host2, first stop the ztncui container on host1:
+```shell
+docker stop ztncui
+```
+To copy the ztncui volume from host1 to host2, execute the following on host1:
+```shell
+docker run --rm --volume ztncui:/from alpine ash -c "cd /from ; tar -cf - . " | ssh user@host2 'docker run --rm -i --volume ztncui:/to alpine ash -c "cd /to ; tar -xpvf - " '
+```
+To copy the zt1 volume from host1 to host2, execute the following on host1:
+```shell
+docker run --rm --volume zt1:/from alpine ash -c "cd /from ; tar -cf - . " | ssh user@host2 'docker run --rm -i --volume zt1:/to alpine ash -c "cd /to ; tar -xpvf - " '
+```
+To run the container on host2:
+```shell
+docker run -dp 3443:3443 --name ztncui --volume ztncui:/opt/key-networks/ztncui/etc/ \
+--volume zt1:/var/lib/zerotier-one/ --cap-add=NET_ADMIN keynetworks/ztncui
 ```
 
 ## Pass environment variables
@@ -70,3 +90,5 @@ This is open source code, licensed under the GNU GPLv3, and is free to use on th
 
 ## Thanks
 @flantel for contributing "Update exec.sh to allow override of HTTP_ variables from environment".
+
+https://www.guidodiepen.nl/2016/05/transfer-docker-data-volume-to-another-host/ for command line for copying Docker volumes between machines.
