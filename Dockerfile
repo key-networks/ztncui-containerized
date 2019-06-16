@@ -4,7 +4,8 @@ LABEL Description="This image contains Zerotier One and ztncui" Vendor="Key Netw
 COPY build.sh /usr/bin/
 RUN build.sh
 
-EXPOSE 3443
+EXPOSE 8000/tcp
+EXPOSE 3443/tcp
 
 COPY exec.sh /usr/sbin/
 ENTRYPOINT ["/usr/sbin/exec.sh"]
