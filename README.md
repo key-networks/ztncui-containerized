@@ -62,11 +62,11 @@ docker run -dp 3443:3443 --name ztncui --volume ztncui:/opt/key-networks/ztncui/
 ```
 
 ## Pass environment variables
-As per https://github.com/key-networks/ztncui#summary-of-listening-states, environment variables can be passed with --env as of ztncui:1.2.2, for example:
+As per https://github.com/key-networks/ztncui#summary-of-listening-states, environment variables can be passed with --env as of ztncui:1.2.2.  Note that as of version 1.2.3 of the Docker image, passing `HTTP_ALL_INTERFACES=yes` will cause `HTTPS_PORT` to be ignored.  Here is an example of how to pass environment variables:
 ```shell
-docker run --env HTTP_PORT=8000 --env HTTPS_PORT=4443 --env HTTP_ALL_INTERFACES=yes -dp 4443:4443 -p 8000:8000 --name ztncui --cap-add=NET_ADMIN keynetworks/ztncui
+docker run --env HTTP_PORT=8000 --env HTTP_ALL_INTERFACES=yes -dp 8000:8000 --name ztncui --cap-add=NET_ADMIN keynetworks/ztncui
 ```
-Note that the above will expose both HTTP and HTTPS publicly... probably not something you want to do.
+Note that the above will expose HTTP on the docker host.  This can be useful for offloading TLS to a proxy, but you should not expose HTTP directly to the Internet.
 
 ## Screenshots
 Screenshots can be found at https://key-networks.com/ztncui#screenshots
@@ -92,3 +92,5 @@ This is open source code, licensed under the GNU GPLv3, and is free to use on th
 @flantel for contributing "Update exec.sh to allow override of HTTP_ variables from environment".
 
 https://www.guidodiepen.nl/2016/05/transfer-docker-data-volume-to-another-host/ for command line for copying Docker volumes between machines.
+
+@mark-stopka for contributing "Modify to enable TLS offload using Traefik".
