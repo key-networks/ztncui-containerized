@@ -104,10 +104,16 @@ mv -f /tmp/zerotier.repo /etc/yum.repos.d/zerotier.repo
 chown 0 /etc/yum.repos.d/zerotier.repo
 chgrp 0 /etc/yum.repos.d/zerotier.repo
 
+# Avoid uid and gid conflicts in Ubuntu Docker hosts
+groupadd -g 2000 zerotier-one
+useradd -u 2000 -g 2000 zerotier-one
+groupadd -g 2001 ztncui
+useradd -u 2001 -g 2001 ztncui
+
 echo
 echo '*** Installing zerotier-one package...'
 
-yum install -y zerotier-one
+dnf install -y zerotier-one
 
 rm -f /tmp/zt-gpg-key
 
@@ -126,9 +132,9 @@ touch /var/lib/zerotier-one/authtoken.secret
 chown zerotier-one.zerotier-one /var/lib/zerotier-one/authtoken.secret
 chmod 640 /var/lib/zerotier-one/authtoken.secret
 
-yum install https://download.key-networks.com/el7/ztncui/1/ztncui-release-1-1.noarch.rpm -y
-yum install ztncui -y
-yum install sudo -y
+dnf install https://download.key-networks.com/el7/ztncui/1/ztncui-release-1-1.noarch.rpm -y
+dnf install ztncui -y
+dnf install sudo -y
 
 rm -f /var/lib/zerotier-one/authtoken.secret
 echo 'HTTPS_PORT=3443' > /opt/key-networks/ztncui/.env

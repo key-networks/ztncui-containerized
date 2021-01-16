@@ -1,5 +1,5 @@
-FROM centos:7
-LABEL Description="This image contains Zerotier One and ztncui" Vendor="Key Networks (https://key-networks.com)"
+FROM centos:8
+LABEL Description="ztncui (a ZeroTier network controller user interface) + Zerotier One" Vendor="Key Networks (https://key-networks.com)"
 ADD VERSION .
 
 COPY build.sh /usr/bin/
