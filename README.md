@@ -7,7 +7,7 @@ Follow us on [![alt @key_networks on Twitter](https://i.imgur.com/wWzX9uB.png)](
 
 ## Docker run
 ```shell
-docker run -dp 3443:3443 --cap-add=NET_ADMIN keynetworks/ztncui
+docker run --name ztncui -dp 3443:3443 keynetworks/ztncui
 ```
 See below for a more secure way of running the container.
 
@@ -23,7 +23,7 @@ MYADDR=12.34.56.78
 ```
 This is to allow you to execute the following two commands in one shot to minimise the chance of some nefarious character getting in before you do:
 ```shell
-docker run --name ztncui -dp 3443:3443 --cap-add=NET_ADMIN keynetworks/ztncui && \
+docker run --name ztncui -dp 3443:3443 keynetworks/ztncui && \
 docker exec ztncui iptables -I INPUT -i eth0+ ! -s $MYADDR -p tcp --dport 3443 -j DROP
 ```
 
@@ -37,7 +37,7 @@ MYADDR=12.34.56.78
 Then, execute in one shot:
 ```shell
 docker run -dp 3443:3443 --name ztncui --volume ztncui:/opt/key-networks/ztncui/etc/ \
---volume zt1:/var/lib/zerotier-one/ --cap-add=NET_ADMIN keynetworks/ztncui && \
+--volume zt1:/var/lib/zerotier-one/ keynetworks/ztncui && \
 docker exec ztncui iptables -I INPUT -i eth0+ ! -s $MYADDR -p tcp --dport 3443 -j DROP
 ```
 
@@ -58,13 +58,13 @@ docker run --rm --volume zt1:/from alpine ash -c "cd /from ; tar -cf - . " | ssh
 To run the container on host2:
 ```shell
 docker run -dp 3443:3443 --name ztncui --volume ztncui:/opt/key-networks/ztncui/etc/ \
---volume zt1:/var/lib/zerotier-one/ --cap-add=NET_ADMIN keynetworks/ztncui
+--volume zt1:/var/lib/zerotier-one/ keynetworks/ztncui
 ```
 
 ## Pass environment variables
 As per https://github.com/key-networks/ztncui#summary-of-listening-states, environment variables can be passed with --env as of ztncui:1.2.2.  Note that as of version 1.2.3 of the Docker image, passing `HTTP_ALL_INTERFACES=yes` will cause `HTTPS_PORT` to be ignored.  Here is an example of how to pass environment variables:
 ```shell
-docker run --env HTTP_PORT=8000 --env HTTP_ALL_INTERFACES=yes -dp 8000:8000 --name ztncui --cap-add=NET_ADMIN keynetworks/ztncui
+docker run --env HTTP_PORT=8000 --env HTTP_ALL_INTERFACES=yes -dp 8000:8000 --name ztncui keynetworks/ztncui
 ```
 Note that the above will expose HTTP on the docker host.  This can be useful for offloading TLS to a proxy, but you should not expose HTTP directly to the Internet.
 
@@ -94,3 +94,5 @@ This is open source code, licensed under the GNU GPLv3, and is free to use on th
 https://www.guidodiepen.nl/2016/05/transfer-docker-data-volume-to-another-host/ for command line for copying Docker volumes between machines.
 
 @mark-stopka for contributing "Modify to enable TLS offload using Traefik".
+
+@mdPlusPlus for clues on removing the requirement for --cap-add=NET_ADMIN and avoiding clashes with Ubuntu UIDs and GIDs.

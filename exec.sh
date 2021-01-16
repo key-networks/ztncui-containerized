@@ -9,7 +9,8 @@ HTTPS_PORT=${HTTPS_PORT:-3443}
 while [ ! -f /var/lib/zerotier-one/authtoken.secret ]; do
   sleep 1
 done
-chmod g+r /var/lib/zerotier-one/authtoken.secret
+chown zerotier-one.zerotier-one /var/lib/zerotier-one/authtoken.secret
+chmod 640 /var/lib/zerotier-one/authtoken.secret
 
 cd /opt/key-networks/ztncui
 
