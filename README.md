@@ -5,6 +5,9 @@ This is a Docker image that contains **[ZeroTier One](https://www.zerotier.com/d
 
 Follow us on [![alt @key_networks on Twitter](https://i.imgur.com/wWzX9uB.png)](https://twitter.com/key_networks)
 
+## Note
+The keynetworks/ztncui Docker image is now being build with https://github.com/key-networks/ztncui-aio - this repo is just being maintained for reference to documentation.
+
 ## Docker run
 ```shell
 docker run --name ztncui -dp 3443:3443 keynetworks/ztncui
