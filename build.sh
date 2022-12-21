@@ -110,6 +110,10 @@ useradd -u 2000 -g 2000 zerotier-one
 groupadd -g 2001 ztncui
 useradd -u 2001 -g 2001 ztncui
 
+# Fix for CentOS 8 gone EOL: Change base URL for package repos to vault.centos.org
+sed -i 's/^mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
+sed -i 's|^#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+
 echo
 echo '*** Installing zerotier-one package...'
 
